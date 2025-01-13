@@ -5,6 +5,8 @@ import it.epicode.S5_L5_BE.db.repo.DipendenteRepo;
 import it.epicode.S5_L5_BE.exceptions.AlreadyExistsException;
 import it.epicode.S5_L5_BE.exceptions.UploadException;
 import it.epicode.S5_L5_BE.web.dto.DipendenteRequest;
+import it.epicode.S5_L5_BE.web.security.auth.AppUser;
+import it.epicode.S5_L5_BE.web.security.auth.AppUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +23,9 @@ public class DipendenteServ {
 
     @Autowired
     private DipendenteRepo dr;
+
+    @Autowired
+    AppUserRepository ur;
 
     public List<Dipendente> findAll() {
         return dr.findAll();
@@ -45,6 +50,10 @@ public class DipendenteServ {
         } catch (Exception ex) {
             throw new UploadException("Errore durante il salvataggio del dipendente: " + ex.getMessage());
         }
+    }
+
+    public Dipendente create(Dipendente d){
+        return dr.save(d);
     }
 
     public Dipendente update(@Valid DipendenteRequest newD, Long id) {
@@ -80,5 +89,14 @@ public class DipendenteServ {
         } catch (Exception ex) {
             throw new UploadException("Errore durante l'eliminazione del dipendente: " + ex.getMessage());
         }
+    }
+
+    public List<String> findByUtente(String utente) {
+        // cerco nel db lo user tramite user name
+
+        AppUser appUser = ur.findByUsername(utente)
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
+
+        return List.of("Il signore degli anelli", "Il trono di spade", "Il nome della rosa");
     }
 }

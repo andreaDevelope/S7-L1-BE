@@ -6,6 +6,7 @@ import it.epicode.S5_L5_BE.web.dto.DipendenteRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,11 +32,13 @@ public class DipendenteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ds.save(newD));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/{id}")
     public ResponseEntity<Dipendente> updateDipendente(@RequestBody DipendenteRequest newD, @PathVariable Long id){
         return ResponseEntity.ok(ds.update(newD, id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Dipendente> deleteDipendente(@PathVariable Long id){
         return ResponseEntity.ok(ds.delete(id));

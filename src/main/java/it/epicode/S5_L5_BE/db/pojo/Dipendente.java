@@ -1,5 +1,6 @@
 package it.epicode.S5_L5_BE.db.pojo;
 
+import it.epicode.S5_L5_BE.web.security.auth.AppUser;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,5 +19,6 @@ public class Dipendente {
     private String cognome;
 
     private String email;
+
 
 }
